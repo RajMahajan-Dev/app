@@ -73,11 +73,11 @@ class AdminLoginResponse(BaseModel):
     message: str
 
 # Public Routes
-@api_router.get("/")
+@app.get("/")
 async def root():
     return {"message": "CouponDeck API"}
 
-@api_router.get("/coupons", response_model=List[Coupon])
+@app.get("/coupons", response_model=List[Coupon])
 async def get_coupons(
     category: Optional[str] = None,
     search: Optional[str] = None,
@@ -109,7 +109,7 @@ async def get_coupons(
     
     return coupons
 
-@api_router.get("/coupons/{coupon_id}", response_model=Coupon)
+@app.get("/coupons/{coupon_id}", response_model=Coupon)
 async def get_coupon(coupon_id: str):
     coupon = await db.coupons.find_one({"id": coupon_id}, {"_id": 0})
     if not coupon:
@@ -120,7 +120,7 @@ async def get_coupon(coupon_id: str):
     
     return coupon
 
-@api_router.get("/categories")
+@app.get("/categories")
 async def get_categories():
     return {
         "categories": [
@@ -136,7 +136,7 @@ async def get_categories():
     }
 
 # Admin Routes
-@api_router.post("/admin/login", response_model=AdminLoginResponse)
+@app.post("/admin/login", response_model=AdminLoginResponse)
 async def admin_login(credentials: AdminLogin):
     if credentials.username == ADMIN_USERNAME and credentials.password == ADMIN_PASSWORD:
         token = secrets.token_urlsafe(32)
@@ -154,7 +154,7 @@ def verify_admin_token(authorization: Optional[str] = Header(None)):
     
     return token
 
-@api_router.post("/admin/coupons", response_model=Coupon)
+@app.post("/admin/coupons", response_model=Coupon)
 async def create_coupon(coupon: CouponCreate, authorization: Optional[str] = Header(None)):
     verify_admin_token(authorization)
     
@@ -165,7 +165,7 @@ async def create_coupon(coupon: CouponCreate, authorization: Optional[str] = Hea
     await db.coupons.insert_one(doc)
     return coupon_obj
 
-@api_router.put("/admin/coupons/{coupon_id}", response_model=Coupon)
+@app.put("/admin/coupons/{coupon_id}", response_model=Coupon)
 async def update_coupon(
     coupon_id: str,
     coupon_update: CouponUpdate,
@@ -188,7 +188,7 @@ async def update_coupon(
     
     return updated_coupon
 
-@api_router.delete("/admin/coupons/{coupon_id}")
+@app.delete("/admin/coupons/{coupon_id}")
 async def delete_coupon(coupon_id: str, authorization: Optional[str] = Header(None)):
     verify_admin_token(authorization)
     
@@ -198,7 +198,7 @@ async def delete_coupon(coupon_id: str, authorization: Optional[str] = Header(No
     
     return {"message": "Coupon deleted successfully"}
 
-@api_router.post("/admin/upload-logo")
+@app.post("/admin/upload-logo")
 async def upload_logo(
     file: UploadFile = File(...),
     authorization: Optional[str] = Header(None)
@@ -216,8 +216,6 @@ async def upload_logo(
     
     return {"url": data_url}
 
-# Include the router in the main app
-app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
