@@ -1,6 +1,13 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "yarn build",
-  "outputDirectory": "build"
+  "projects": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "yarn build",
+        "outputDirectory": "build"
+      }
+    }
+  ]
 }
