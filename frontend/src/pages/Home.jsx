@@ -78,6 +78,18 @@ const Home = () => {
     setFilteredCoupons(filtered);
   };
 
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    
+    // Update URL with search query
+    if (value.trim()) {
+      setSearchParams({ search: value });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   const featuredCoupons = coupons.filter(c => c.featured);
 
   return (
