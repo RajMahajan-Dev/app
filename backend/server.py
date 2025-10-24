@@ -28,8 +28,8 @@ api_router = APIRouter(prefix="/api")
 
 # In-memory session storage (simple auth)
 admin_sessions = {}
-ADMIN_USERNAME = "raj2151"
-ADMIN_PASSWORD = "passraj2151"
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'raj2151')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'passraj2151')
 
 # Define Models
 class Coupon(BaseModel):
