@@ -118,7 +118,7 @@ const Home = () => {
                 type="text"
                 placeholder="Search by brand, category, or keyword..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none text-lg shadow-lg"
                 data-testid="search-input"
               />
