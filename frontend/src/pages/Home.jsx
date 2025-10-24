@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CouponCard from '../components/CouponCard';
@@ -11,6 +12,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [coupons, setCoupons] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -18,6 +20,14 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Read search query from URL on mount
+  useEffect(() => {
+    const urlSearch = searchParams.get('search');
+    if (urlSearch) {
+      setSearchQuery(decodeURIComponent(urlSearch));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchCategories();
