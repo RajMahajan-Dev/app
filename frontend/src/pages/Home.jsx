@@ -90,7 +90,23 @@ const Home = () => {
     }
   };
 
-  const featuredCoupons = coupons.filter(c => c.featured);
+  // Filter featured coupons based on search query
+  const getFeaturedCoupons = () => {
+    let featured = coupons.filter(c => c.featured);
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      featured = featured.filter(
+        c => c.store_name.toLowerCase().includes(query) ||
+             c.title.toLowerCase().includes(query) ||
+             c.category.toLowerCase().includes(query)
+      );
+    }
+    
+    return featured;
+  };
+
+  const featuredCoupons = getFeaturedCoupons();
 
   return (
     <div className="min-h-screen bg-white">
