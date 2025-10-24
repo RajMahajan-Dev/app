@@ -5,12 +5,15 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "buildCommand": "yarn build",
+        "buildCommand": "npm run build",
         "outputDirectory": "build"
       }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "frontend/build/$1" }
+    {
+      "src": "/(.*)",
+      "dest": "frontend/build/$1"
+    }
   ]
 }
